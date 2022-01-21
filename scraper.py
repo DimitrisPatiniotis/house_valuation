@@ -6,7 +6,7 @@ from time import sleep
 import pandas as pd
 
 clmns = ['type', 'loc', 'sqm', 'lvl', 'nbed', 'nbath', 'year', 'price']
-house_stats = pd.DataFrame(columns=clmns7)
+house_stats = pd.DataFrame(columns=clmns)
 
 # Supporting Functions
 def get_clean_num(string, position):
