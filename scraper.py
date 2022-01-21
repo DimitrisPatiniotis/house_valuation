@@ -15,54 +15,45 @@ def get_clean_num(string, position):
 def get_clean_str(string, position):
     return [str(s) for s in string.split() if s.isalpha()][position]
 
+def generate_urls(page_nums):
+    url_list =[]
+    for page in range(page_nums):
+        print(page)
+        url = 'https://www.xe.gr/property/results?page={num}&geo_place_id=ChIJRzGst-u7oRQR9_0w_5XaINg&item_type=re_residence&transaction_name=buy'.format(num=page)
+        url_list.append(url)
+    return url_list
 
-# Main Function
-def main():
-
-    # URL = "https://www.xe.gr/property/r/poliseis-katoikion/ChIJRzGst-u7oRQR9_0w_5XaINg_peiraias"
-    # r = requests.get(URL)
-
-    # soup = BeautifulSoup(r.content, features="html5lib")
-
-    # with open("output1.html", "w") as file:
-    #     file.write(str(soup))
-
-
-    with open("page{}.html".format(1), "r") as file:
-        soup = BeautifulSoup(file, 'html.parser')
-
-    curr_page_properties = soup.find_all("div", {"class":"common-property-ad"})
-    for i in range(len(curr_page_properties)):
-        instance_title = str(curr_page_properties[i].find("div", {"class":"common-property-ad-title"}).getText())
+def extract_instance(instance):
+        instance_title = str(instance.find("div", {"class":"common-property-ad-title"}).getText())
         instance_type = [str(s) for s in instance_title.split() if s.isalpha()][0]
         square_meters = [int(s) for s in instance_title.split() if s.isdigit()][0]
 
-        price_raw = str(curr_page_properties[i].find("span", {"class":"property-ad-price"}).getText().replace('.',''))
+        price_raw = str(instance.find("span", {"class":"property-ad-price"}).getText().replace('.',''))
         price_clean = get_clean_num(price_raw, 0)
 
         try:
-            bedrooms_raw = str(curr_page_properties[i].find("div", {"class":"property-ad-bedrooms-container"}).getText()).replace("×","")
+            bedrooms_raw = str(instance.find("div", {"class":"property-ad-bedrooms-container"}).getText()).replace("×","")
             bedrooms_clean = get_clean_num(bedrooms_raw, 0)
         except:
-            print('\n\nbedroom problem')
-            continue
+            # print('\n\nbedroom problem')
+            return False
 
         try:
-            bathrooms_raw = str(curr_page_properties[i].find("div", {"class":"property-ad-bathrooms-container"}).getText()).replace("×","")
+            bathrooms_raw = str(instance.find("div", {"class":"property-ad-bathrooms-container"}).getText()).replace("×","")
             bathrooms_clean = get_clean_num(bathrooms_raw, 0)
         except:
-            print('\n\nbathroom problem')
-            continue
+            # print('\n\nbathroom problem')
+            return False
 
         try:
-            construction_year_raw = str(curr_page_properties[i].find("div", {"class":"property-ad-construction-year-container"}).getText()).replace("×","")
+            construction_year_raw = str(instance.find("div", {"class":"property-ad-construction-year-container"}).getText()).replace("×","")
             construction_year_clean = get_clean_num(construction_year_raw, 0)
         except:
-            print('\n\nage problem')
-            continue
+            # print('\n\nage problem')
+            return False
         
         try:
-            level_raw = str(curr_page_properties[i].find("span", {"class":"property-ad-level"}).getText()).replace("ος","").replace("+","").replace(",","")
+            level_raw = str(instance.find("span", {"class":"property-ad-level"}).getText()).replace("ος","").replace("+","").replace(",","")
             try:
                 level_clean = get_clean_num(level_raw, 0)
             except:
@@ -74,21 +65,43 @@ def main():
                 elif level_clean == 'Ημιυπόγειο':
                     level_clean = -0.5
         except:
-            print('\nLevel Problem')
-            break
+            # print('\nLevel Problem')
+            return False
 
-        location_raw = str(curr_page_properties[i].find("span", {"class":"common-property-ad-address"}).getText()).replace("Πειραιάς (","").replace(") | Πώληση κατοικίας","")
+        location_raw = str(instance.find("span", {"class":"common-property-ad-address"}).getText()).replace("Πειραιάς (","").replace(") | Πώληση κατοικίας","")
         location_clean = ' '.join([str(s) for s in location_raw.split() if s.isalpha()])
 
-        print('\nInstance {}\n'.format(str(i)))
-        print('type: ' + str(instance_type))
-        print('location: ' + str(location_clean))
-        print('square meters: ' + str(square_meters))
-        print('level: ' + str(level_clean))
-        print('number of bedrooms: ' + str(bedrooms_clean))
-        print('number of bathrooms: ' + str(bathrooms_clean))
-        print('age: ' + str(construction_year_clean))
-        print('price: ' + str(price_clean) + "€")
+        house_row = [instance_type, location_clean, square_meters, level_clean, bedrooms_clean, bathrooms_clean, construction_year_clean, price_clean]
+
+        return house_row
+
+def append_page_info(page):
+    r = requests.get(page)
+    soup = BeautifulSoup(r.content, features="html5lib")
+    curr_page_properties = soup.find_all("div", {"class":"common-property-ad"})
+    for i in range(len(curr_page_properties)):
+        extraction_res = extract_instance(curr_page_properties[i])
+        if extraction_res:
+            house_stats.loc[len(house_stats)] = extraction_res
+
+
+# Main Function
+def main():
+
+    urls = generate_urls(100)
+
+    with open("output1.html", "w") as file:
+        file.write(str(soup))
+    while len(house_stats) < 100:
+        for url in urls:
+            append_page_info(url)
+            print('Page {} done'.format(url))
+            sleep(46)
+        
+
+    print(house_stats.head(100))
+    print(len(house_stats))
+
 
 if __name__ == "__main__":
     main()
