@@ -4,6 +4,9 @@ from bs4 import BeautifulSoup
 import os
 from time import sleep
 import pandas as pd
+from random import randrange
+import datetime
+import re
 
 clmns = ['type', 'loc', 'sqm', 'lvl', 'nbed', 'nbath', 'year', 'price']
 house_stats = pd.DataFrame(columns=clmns)
@@ -17,10 +20,10 @@ def get_clean_str(string, position):
 
 def generate_urls(page_nums):
     url_list =[]
-    for page in range(page_nums):
-        print(page)
-        url = 'https://www.xe.gr/property/results?page={num}&geo_place_id=ChIJRzGst-u7oRQR9_0w_5XaINg&item_type=re_residence&transaction_name=buy'.format(num=page)
+    for page in range(2,page_nums):
+        url = 'https://www.xe.gr/property/results?page={}&geo_place_id=ChIJRzGst-u7oRQR9_0w_5XaINg&item_type=re_residence&transaction_name=buy'.format(page)
         url_list.append(url)
+    print('{} urls generated'.format(page_nums - 1))
     return url_list
 
 def extract_instance(instance):
@@ -76,8 +79,9 @@ def extract_instance(instance):
         return house_row
 
 def append_page_info(page):
+    print(page)
     r = requests.get(page)
-    soup = BeautifulSoup(r.content, features="html5lib")
+    soup = BeautifulSoup(r.text, "html.parser")
     curr_page_properties = soup.find_all("div", {"class":"common-property-ad"})
     for i in range(len(curr_page_properties)):
         extraction_res = extract_instance(curr_page_properties[i])
@@ -85,23 +89,29 @@ def append_page_info(page):
             house_stats.loc[len(house_stats)] = extraction_res
 
 
+def find_chars_until_space(str):
+    find = re.compile(r"^[^ ]*")
+    m = re.search(find, str).group(0)
+    return m
+
 # Main Function
 def main():
 
     urls = generate_urls(100)
 
-    with open("output1.html", "w") as file:
-        file.write(str(soup))
-    while len(house_stats) < 100:
-        for url in urls:
+    for url in urls:
+        if len(house_stats) < 1000:
             append_page_info(url)
             print('Page {} done'.format(url))
-            sleep(46)
-        
+            print('Have fetched {} total house stats.'.format(len(house_stats)))
+            sleep(randrange(20,35))
+        else: 
+            break
+    date = find_chars_until_space(str(datetime.datetime.now()))
 
     print(house_stats.head(100))
     print(len(house_stats))
-
+    house_stats.to_csv('house_data_{}.csv'.format(date),index=False)
 
 if __name__ == "__main__":
     main()
