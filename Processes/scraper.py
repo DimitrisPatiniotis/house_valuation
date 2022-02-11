@@ -1,7 +1,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-import os
 from time import sleep
 import pandas as pd
 from random import randrange
@@ -111,7 +110,7 @@ def main():
 
     print(house_stats.head(100))
     print(len(house_stats))
-    house_stats.to_csv('house_data_{}.csv'.format(date),index=False)
+    house_stats.to_csv('../datasets/house_data_{}.csv'.format(date),index=False)
 
 if __name__ == "__main__":
     main()
