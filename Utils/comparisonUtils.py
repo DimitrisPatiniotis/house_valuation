@@ -20,105 +20,8 @@ from sklearn.preprocessing import StandardScaler
 # Evaluation Metrics
 from sklearn.metrics import mean_squared_error, r2_score
 
-housedata = pd.read_csv("house_data_2022-02-09.csv")
-housedata['lvl'] = housedata['lvl'].replace('Υπερυψωμένο', 0.5).replace('Υπόγειο', -1).replace('Ημιώροφ', 0.5)
-
-dictionary =  {
-    'α' : 'a',
-    'Α' : 'a',
-    'ά' : 'a',
-    'Ά' : 'a',
-    'β' : 'b',
-    'Β' : 'b',
-    'γ' : 'g',
-    'Γ' : 'g',
-    'δ' : 'd',
-    'Δ' : 'd',
-    'ε' : 'e',
-    'έ' : 'e',
-    'Ε' : 'e',
-    'Έ' : 'e',
-    'ζ' : 'z',
-    'Ζ' : 'z',
-    'η' : 'h',
-    'ή' : 'h',
-    'Η' : 'h',
-    'Ή' : 'h',
-    'θ' : 'th',
-    'Θ' : 'th',
-    'ι' : 'i',
-    'ί' : 'i',
-    'ϊ' : 'i',
-    'Ι' : 'i',
-    'Ί' : 'i',
-    'κ' : 'k',
-    'Κ' : 'k',
-    'λ' : 'l',
-    'Λ' : 'l',
-    'μ' : 'm',
-    'Μ' : 'm',
-    'ν' : 'n',
-    'Ν' : 'n',
-    'ξ' : 'x',
-    'Ξ' : 'x',
-    'ο' : 'o',
-    'ό' : 'o',
-    'Ο' : 'o',
-    'Ό' : 'o',
-    'π' : 'p',
-    'Π' : 'p',
-    'ρ' : 'r',
-    'Ρ' : 'r',
-    'σ' : 's',
-    'Σ' : 's',
-    'ς' : 's',
-    'τ' : 't',
-    'Τ' : 't',
-    'υ' : 'u',
-    'ύ' : 'u',
-    'Υ' : 'u',
-    'Ύ' : 'u',
-    'φ' : 'f',
-    'Φ' : 'f',
-    'χ' : 'x',
-    'Χ' : 'x',
-    'ψ' : 'ps',
-    'Ψ' : 'ps',
-    'ω' : 'w',
-    'ώ' : 'w',
-    'Ω' : 'w',
-    'Ώ' : 'w',
-    ' ' : ' ',
-}
-
-def gr_to_en(grstr):
-    return ''.join([dictionary.get(i) for i in grstr])
-
-housedata['loc'] = housedata['loc'].apply(lambda x: gr_to_en(x))
-housedata['type'] = housedata['type'].apply(lambda x : gr_to_en(x))
-
-def reverse_year(year):
-    return  datetime.now().year - int(year)
-
-print(len(housedata))
-# Droping outliers
-upper_lim = housedata['price'].quantile(.99)
-lower_lim = housedata['price'].quantile(.01)
-housedata = housedata[(housedata['price'] < upper_lim) & (housedata['price'] > lower_lim)]
-print(len(housedata))
 
 
-def label_encoding(columns_list, dataframe):
-    for col in columns_list:
-        dataframe[col] = dataframe[col].astype('category')
-        dataframe[col] = dataframe[col].cat.codes
-    return dataframe
-
-def one_hot_encoding(columns_list, dataframe):
-    for col in columns_list:
-        column = pd.get_dummies(dataframe[col])
-        dataframe = dataframe.join(column).drop(col, axis=1)
-    return dataframe
 
 def min_max_scaler(columns_list, dataframe):
     for col in columns_list:
@@ -168,7 +71,7 @@ def randomForest(X_train, X_test, y_train, y_test):
     rf.fit(X_train, y_train)
     y_pred = rf.predict(X_test)
     print("Random Forest Regression mean squared error: %.5f" % mean_squared_error(y_test, y_pred))
-    return rf
+    return rf, mean_squared_error(y_test, y_pred), 
 
 def lassoRegressor(X_train, X_test, y_train, y_test):
     las = Lasso(alpha = 0.1)
@@ -176,9 +79,6 @@ def lassoRegressor(X_train, X_test, y_train, y_test):
     y_pred = las.predict(X_test)
     print("Lasso Regression mean squared error: %.5f" % mean_squared_error(y_test, y_pred))
     return y_pred, las
-
-def make_prediction(data):
-    pass
 
 # print(housedata.iloc[-1]['price'])
 housedata, mm_scaler = min_max_scaler(['price', 'year'], housedata)
@@ -188,7 +88,7 @@ last_price = housedata.iloc[-1]['price']
 # sns.pairplot(housedata)
 # plt.show()
 
-housedata = one_hot_encoding(['loc', 'type'], housedata)
+
 
 last_row = housedata.tail(1).drop('price', axis=1)
 housedata.drop(housedata.tail(1).index,inplace=True)

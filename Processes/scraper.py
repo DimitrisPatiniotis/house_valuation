@@ -37,21 +37,18 @@ def extract_instance(instance):
             bedrooms_raw = str(instance.find("div", {"class":"property-ad-bedrooms-container"}).getText()).replace("×","")
             bedrooms_clean = get_clean_num(bedrooms_raw, 0)
         except:
-            # print('\n\nbedroom problem')
             return False
 
         try:
             bathrooms_raw = str(instance.find("div", {"class":"property-ad-bathrooms-container"}).getText()).replace("×","")
             bathrooms_clean = get_clean_num(bathrooms_raw, 0)
         except:
-            # print('\n\nbathroom problem')
             return False
 
         try:
             construction_year_raw = str(instance.find("div", {"class":"property-ad-construction-year-container"}).getText()).replace("×","")
             construction_year_clean = get_clean_num(construction_year_raw, 0)
         except:
-            # print('\n\nage problem')
             return False
         
         try:
@@ -110,7 +107,7 @@ def main():
 
     print(house_stats.head(100))
     print(len(house_stats))
-    house_stats.to_csv('../datasets/house_data_{}.csv'.format(date),index=False)
+    house_stats.to_csv('../Datasets/house_data_{}.csv'.format(date),index=False)
 
 if __name__ == "__main__":
     main()
