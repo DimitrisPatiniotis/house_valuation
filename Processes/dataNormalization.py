@@ -4,7 +4,7 @@ sys.path.insert(1, '../Utils/')
 
 from dataProcessing import *
 
-def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outlier_lower = .01, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year']):
+def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outlier_lower = .01, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year'], added_row = None):
 
     print('Starting data processing')
 
@@ -23,6 +23,10 @@ def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outli
     except:
         print('Please insert valid outlier limits (range .00 to .99) and a valid field name')
         return False
+
+    if type(added_row) == 'DataFrame':
+        housedata = pd.concat([housedata, added_row], ignore_index = True, axis = 0)
+
 
     # Replacing string instances from lvl column
     housedata['lvl'] = housedata['lvl'].replace('Υπερυψωμένο', 0.5).replace('Υπόγειο', -1).replace('Ημιώροφ', 0.5)
