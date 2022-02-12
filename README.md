@@ -6,7 +6,7 @@
 
 ## Overview
 
-This project contains a complete house price estimator for the city of Piraeus. It came into fruition in the context of a machine learning excercise and should be treated as such.
+This project contains a complete house price estimator for the city of Piraeus. It came to fruition in the context of a machine learning excercise and should be treated as such.
 
 ## Getting Started
 
