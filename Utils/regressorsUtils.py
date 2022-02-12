@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 
 # Models
-from sklearn.linear_model import BayesianRidge, Lasso
+from sklearn.linear_model import BayesianRidge, Lasso, LinearRegression
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
@@ -46,6 +46,23 @@ def runRandomForest(X_train, X_test, y_train, y_test):
     plt = test_vs_pred_plot(y_test,y_pred, 'Random Forest Regressor Accuracy')
 
     return rf, mse, rs, plt
+
+def runKNeighbors(X_train, X_test, y_train, y_test):
+    kn = KNeighborsRegressor()
+    kn.fit(X_train, y_train)
+    y_pred = kn.predict(X_test)
+    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    plt = test_vs_pred_plot(y_test,y_pred, 'K-Neighbors Regressor Accuracy')
+    return kn, mse, rs, plt
+
+def runLinearRegression(X_train, X_test, y_train, y_test):
+    lr = LinearRegression()
+    lr.fit(X_train, y_train)
+    y_pred = lr.predict(X_test)
+    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    plt = test_vs_pred_plot(y_test,y_pred, 'Linear Regressor Accuracy')
+
+    return lr, mse, rs, plt
 
 if __name__ == "__main__":
     print('Just a utility file, nothing to see here :)')
