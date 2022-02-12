@@ -2,7 +2,7 @@ import time
 import sys
 sys.path.insert(1, '../Utils/')
 
-from dataProcessing import *
+from dataProcessingUtils import *
 
 def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outlier_lower = .01, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year'], added_row = None):
 

@@ -6,6 +6,9 @@ import datetime
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 
+# Train Test Split
+from sklearn.model_selection import train_test_split
+
 dictionary =  {
     'α' : 'a',
     'Α' : 'a',
@@ -101,6 +104,13 @@ def standard_scaler(col, dataframe):
     scaler = StandardScaler()
     dataframe[col] = scaler.fit_transform(dataframe[col].array.reshape(-1,1))
     return dataframe, scaler
+
+def split_data(data, test_size):
+    X = data.drop('price', axis=1)
+    y = data['price']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+    return X_train, X_test, y_train, y_test
+
 
 if __name__ == "__main__":
    print('Just a utility file, nothing to see here :)')

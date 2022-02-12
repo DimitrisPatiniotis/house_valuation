@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import explained_variance_score
 import matplotlib.pyplot as plt
@@ -13,9 +12,6 @@ from sklearn.tree import DecisionTreeRegressor
 
 from sklearn.svm import SVR
 
-# Scalers
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
 
 # Evaluation Metrics
 from sklearn.metrics import mean_squared_error, r2_score
@@ -80,30 +76,12 @@ def lassoRegressor(X_train, X_test, y_train, y_test):
     print("Lasso Regression mean squared error: %.5f" % mean_squared_error(y_test, y_pred))
     return y_pred, las
 
-# print(housedata.iloc[-1]['price'])
-housedata, mm_scaler = min_max_scaler(['price', 'year'], housedata)
-last_price = housedata.iloc[-1]['price']
-# print(type(last_price))
-
-# sns.pairplot(housedata)
-# plt.show()
 
 
-
-last_row = housedata.tail(1).drop('price', axis=1)
-housedata.drop(housedata.tail(1).index,inplace=True)
-# print(last_row)
-
-X = housedata.drop('price', axis=1)
-
-y = housedata['price']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 
 def main():
     pass
 
 if __name__ == "__main__":
-
    main()
