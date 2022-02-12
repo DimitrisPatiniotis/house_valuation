@@ -2,11 +2,16 @@
 
 ## Table of contents
 * [Overview](#overview)
+* [Goals](#goals)
 * [Getting Started](#getting-started)
 
 ## Overview
 
 This project contains a complete house price estimator for the city of Piraeus. It came to fruition in the context of a machine learning excercise and should be treated as such.
+
+## Goals
+
+The goal of this project is to experiment with and compare different regression models and to create an API which makes an estimation of the value of a house located in Piraeus.
 
 ## Getting Started
 
