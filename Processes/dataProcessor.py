@@ -4,7 +4,7 @@ sys.path.insert(1, '../Utils/')
 
 from dataProcessingUtils import *
 
-def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .98, outlier_lower = .02, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year'], added_row = None):
+def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .989, outlier_lower = .01, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year'], added_row = None):
 
     print('Starting data processing')
 

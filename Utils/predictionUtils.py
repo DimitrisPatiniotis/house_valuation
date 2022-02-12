@@ -2,7 +2,7 @@ import pandas as pd
 import sys
 sys.path.insert(1, '../Processes/')
 
-from dataNormalization import *
+from dataProcessor import *
 
 def list_to_df(input_list):
     return pd.DataFrame([input_list], columns=['type','loc','sqm','lvl','nbed','nbath','year', 'price']) 

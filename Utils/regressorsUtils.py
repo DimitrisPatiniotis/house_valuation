@@ -11,8 +11,8 @@ from sklearn.svm import SVR
 # Metrics
 from sklearn.metrics import mean_squared_error, r2_score
 
-def print_model_results(model_name, mse, rs):
-    print('{} has an MSE of {} and an R-squared of {}'.format(model_name, round(mse, 3), round(rs,3)))
+def print_model_results(model_name, mse, rs, rmse):
+    print('{} has an MSE of {},a R-squared of {} and a Root MSE of {}'.format(model_name, round(mse, 3), round(rs,3), round(rmse,3)))
 
 def test_vs_pred_plot(y_test,y_pred, title_text=''):
     x_ax = range(len(y_test))
@@ -26,43 +26,43 @@ def runBayesianRidge(X_train, X_test, y_train, y_test):
     clf = BayesianRidge(n_iter=100)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
-    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    mse, rs, rmse = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred), mean_squared_error(y_test, y_pred, squared=False)
     plt = test_vs_pred_plot(y_test,y_pred, 'Bayesian Ridge Regressor Accuracy')
-    return clf, mse, rs, plt
+    return clf, mse, rs, rmse, plt
 
 def runSupportVector(X_train, X_test, y_train, y_test):
     svr = SVR()
     svr.fit(X_train, y_train)
     y_pred = svr.predict(X_test)
-    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    mse, rs, rmse = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred), mean_squared_error(y_test, y_pred, squared=False)
     plt = test_vs_pred_plot(y_test,y_pred, 'Support Vector Regressor Accuracy')
-    return svr, mse, rs, plt
+    return svr, mse, rs, rmse, plt
 
 def runRandomForest(X_train, X_test, y_train, y_test):
     rf = RandomForestRegressor()
     rf.fit(X_train, y_train)
     y_pred = rf.predict(X_test)
-    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    mse, rs, rmse = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred), mean_squared_error(y_test, y_pred, squared=False)
     plt = test_vs_pred_plot(y_test,y_pred, 'Random Forest Regressor Accuracy')
 
-    return rf, mse, rs, plt
+    return rf, mse, rs, rmse, plt
 
 def runKNeighbors(X_train, X_test, y_train, y_test):
     kn = KNeighborsRegressor()
     kn.fit(X_train, y_train)
     y_pred = kn.predict(X_test)
-    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    mse, rs, rmse = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred), mean_squared_error(y_test, y_pred, squared=False)
     plt = test_vs_pred_plot(y_test,y_pred, 'K-Neighbors Regressor Accuracy')
-    return kn, mse, rs, plt
+    return kn, mse, rs, rmse, plt
 
 def runLinearRegression(X_train, X_test, y_train, y_test):
     lr = LinearRegression()
     lr.fit(X_train, y_train)
     y_pred = lr.predict(X_test)
-    mse, rs = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred)
+    mse, rs, rmse = mean_squared_error(y_test, y_pred), r2_score(y_test, y_pred), mean_squared_error(y_test, y_pred, squared=False)
     plt = test_vs_pred_plot(y_test,y_pred, 'Linear Regressor Accuracy')
 
-    return lr, mse, rs, plt
+    return lr, mse, rs, rmse, plt
 
 if __name__ == "__main__":
     print('Just a utility file, nothing to see here :)')
