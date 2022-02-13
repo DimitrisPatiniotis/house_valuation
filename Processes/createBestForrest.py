@@ -18,6 +18,7 @@ def get_best_rfr(date):
 
     data = normalize('../Datasets/house_data_{}.csv'.format(date), scaled_list = ['price','year','loc', 'type'], encoding_type='label')[0]
     X_train, X_test, y_train, y_test = split_data(data, 0.2)
+    print(y_train)
     min_rmse = 100
     current_return = None
     iters = 10
@@ -40,7 +41,7 @@ def create_and_store_model():
     start_timer = time.time()
     date = find_chars_until_space(str(datetime.datetime.now()))
     min_rmse = 100
-    while min_rmse > 0.088:
+    while min_rmse > 0.085:
         model, min_rmse = get_best_rfr(date)
 
     with open('../Models/model_{}.pickle'.format(date), 'wb') as f:

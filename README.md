@@ -4,6 +4,10 @@
 * [Overview](#overview)
 * [Goals](#goals)
 * [Getting Started](#getting-started)
+* [Run Demo](#run-demo)
+* [Get Today's Data](#get-today's-data)
+* [Create Today's Best Model](#create-today's-best-model)
+* [Make A Prediction](#make-a-prediction)
 
 ## Overview
 
@@ -31,9 +35,81 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-3. You are now ready to run the demo or make a new prediction
+## Run Demo
+
+To execute default demo run:
 
 ```
-$ python3 demo.py
-$ python3 makeprediction.py <list type,location,sqm,level,number of beds,number of baths,year of construction>  <algorithm (optional)>
+$ python3 demo.py default
+```
+
+To execute demo with logarithmic scaling run:
+
+```
+$ python3 demo.py scaling log
+```
+
+To execute demo with standard scaling run:
+
+```
+$ python3 demo.py scaling standard
+```
+
+To execute k-NN experiment (examining the relationship between the number of neighbors and model performance) run:
+
+```
+$ python3 demo.py test knn
+```
+
+To execute Bayesian Ridge Regression experiment (examining the relationship between the number of iterations and model performance) run:
+
+```
+$ python3 demo.py test brr
+```
+
+To execute Support Vector Regression experiment (examining the relationship between C parameter and model performance) run:
+
+```
+$ python3 demo.py test svr
+```
+
+Finally, to execute Random Forest Regression experiment (examining the relationship between the number of estimators and model performance) run:
+
+```
+$ python3 demo.py test rfr
+```
+
+## Get Today's Data
+
+To get today's data run:
+
+```
+$ python3 Processes/scraper.py 
+```
+
+## Create Today's Best Model
+
+To create an up-to-date inference model (a Random Forest Regressor) run:
+
+```
+$ cd Processes/
+$ python3 createBestForrest.py
+```
+
+Note that the model created has a maximum RMSE of 0.085.
+
+## Make A Prediction
+
+Before you make a prediction, make sure you created have have up to date data and an up to date model (see the two steps mentioned above). Also make sure you are in the project's root directory.
+
+To make a new prediction run:
+
+```
+$ python3 makeprediction.py <property_type> <specific_location> <square_meters> <level> <number_of_bedrooms> <number_of_bathrooms> <construction_year>
+```
+
+Property type and specific location values are not case sensitive, do not need stress-marks and can even be written in latin characters. An example is given bellow:
+
+```
+$ python3 makeprediction.py Διαμέρισμα Πασαλιμανι 90 2 2 1 1971
 ```

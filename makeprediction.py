@@ -23,9 +23,10 @@ def make_prediction(quer):
     clean_data, price_scaler = convert_query(csv_path, quer)
     prediction_scaled = model.predict(clean_data)
     prediction = reverse_scale(price_scaler, prediction_scaled.reshape(1,-1))
+    print(prediction_scaled)
     prediction_clean = round(prediction[0][0])
     end_timer = time.time()
-    print('Prediction is {} and was made in {} seconds'.format(str(prediction_clean),str(round((end_timer - start_timer), 3))))
+    print('The prediction is {}€ and was made in {} seconds'.format(str(prediction_clean),str(round((end_timer - start_timer), 3))))
     return prediction_clean
 
 
