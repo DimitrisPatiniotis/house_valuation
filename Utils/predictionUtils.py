@@ -17,7 +17,7 @@ def convert_query(csv_path, query_params=['Διαμέρισμα', 'Καμίνι�
 
     query_unscaled = list_to_df(query_params)
 
-    scaled_frame, scalers = normalize(csv_file_path = csv_path, added_row = query_unscaled)
+    scaled_frame, scalers = normalize(csv_file_path = csv_path, added_row = query_unscaled, scaled_list = ['price','year','loc', 'type'],encoding_type='label')
 
     scaled_query = scaled_frame.tail(1).drop('price', axis=1)
 

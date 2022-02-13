@@ -43,7 +43,7 @@ def create_and_store_model():
     while min_rmse > 0.088:
         model, min_rmse = get_best_rfr(date)
 
-    with open('../Models/model_{}'.format(date), 'wb') as f:
+    with open('../Models/model_{}.pickle'.format(date), 'wb') as f:
         pickle.dump(model, f)
     end_timer = time.time()
     print('Model created succesfully in {} seconds and stored at ../Models/model_{}'.format(str(round((end_timer - start_timer), 3)), date))
