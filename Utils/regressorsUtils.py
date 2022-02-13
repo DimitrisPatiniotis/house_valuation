@@ -1,5 +1,7 @@
 # Graphs
 import matplotlib.pyplot as plt
+from math import sqrt
+import pandas as pd
 
 # Models
 from sklearn.linear_model import BayesianRidge, Lasso, LinearRegression
@@ -63,6 +65,86 @@ def runLinearRegression(X_train, X_test, y_train, y_test):
     plt = test_vs_pred_plot(y_test,y_pred, 'Linear Regressor Accuracy')
 
     return lr, mse, rs, rmse, plt
+
+
+def testBRR(X_train, X_test, y_train, y_test, its=300):
+    rmse_val = []
+    for n in range(1, its):
+        n = n+1
+        model = BayesianRidge(n_iter=n)
+
+        model.fit(X_train, y_train)
+        pred=model.predict(X_test)
+        error = round(sqrt(mean_squared_error(y_test,pred)),3)
+        rmse_val.append(error)
+        print('RMSE value for n = ' , n , 'is:', error)
+
+    plt.plot(range(its-1), rmse_val, color="blue", label="Performance")
+    plt.xlabel("n Maximum Iterations")
+    plt.ylabel("RMSE")
+    plt.legend()
+    plt.title('BRR Performance')
+    plt.show()
+
+def testKNN(X_train, X_test, y_train, y_test, its=20):
+    rmse_val = []
+    for K in range(its):
+        K = K+1
+        model = KNeighborsRegressor(n_neighbors = K)
+
+        model.fit(X_train, y_train)
+        pred=model.predict(X_test)
+        error = sqrt(mean_squared_error(y_test,pred))
+        rmse_val.append(error)
+        print('RMSE value for k= ' , K , 'is:', error)
+
+    plt.plot(range(its), rmse_val, color="blue", label="Performance")
+    plt.xlabel("k Value")
+    plt.ylabel("RMSE")
+    plt.legend()
+    plt.title('k-Neighbors Performance')
+    plt.show()
+
+def testSVR(X_train, X_test, y_train, y_test, its=600):
+    rmse_val = []
+    Cn = 0
+    for i in range(0,its):
+        Cn += 0.1
+        model = SVR(C = Cn)
+
+        model.fit(X_train, y_train)
+        pred=model.predict(X_test)
+        error = sqrt(mean_squared_error(y_test,pred))
+        rmse_val.append(error)
+        # print('RMSE value for C= ' , Cn , 'is:', error)
+
+    plt.plot([i*0.1 for i in range(its)], rmse_val, color="blue", label="Performance")
+    plt.xlabel("C Value")
+    plt.ylabel("RMSE")
+    plt.legend()
+    plt.title('SVR Performance')
+    plt.show()
+
+def testRFR(X_train, X_test, y_train, y_test, its=100):
+    rmse_val = []
+    est = 49
+    for i in range(0,its):
+        est += 1
+        model = RandomForestRegressor(n_estimators= est)
+
+        model.fit(X_train, y_train)
+        pred=model.predict(X_test)
+        error = sqrt(mean_squared_error(y_test,pred))
+        rmse_val.append(error)
+        print('RMSE value for n_estimators= ' , est , 'is:', error)
+
+    plt.plot([i+50 for i in range(its)], rmse_val, color="blue", label="Performance")
+    plt.xlabel("Number of Estimators")
+    plt.ylabel("RMSE")
+    plt.legend()
+    plt.title('RFR Performance')
+    plt.show()
+
 
 if __name__ == "__main__":
     print('Just a utility file, nothing to see here :)')

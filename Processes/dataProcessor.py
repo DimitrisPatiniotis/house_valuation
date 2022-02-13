@@ -1,10 +1,13 @@
+import numpy as np
 import time
 import sys
+from sklearn.preprocessing import FunctionTransformer
 sys.path.insert(1, '../Utils/')
 
 from dataProcessingUtils import *
 
-def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .989, outlier_lower = .01, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year'], added_row = None):
+
+def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outlier_lower = .01, encoding_type = 'one_hot', encoding_list = ['loc', 'type'], scaling_method = 'min_max', scaled_list = ['price','year'], added_row = None):
 
     print('Starting data processing')
 
@@ -53,11 +56,17 @@ def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .989, outl
     if scaling_method == 'min_max':
         for i in scaled_list:
             housedata, locals()[str(i) + '_scaler'] = min_max_scaler(i, housedata)
-            scalers.append(locals()[str(i) + '_scaler'])
+            if i == 'price': scalers.append(locals()[str(i) + '_scaler'])
     elif scaling_method == 'standard':
         for i in scaled_list:
             housedata, locals()[str(i) + '_scaler'] = standard_scaler(i, housedata)
-            scalers.append(locals()[str(i) + '_scaler'])
+            if i == 'price': scalers.append(locals()[str(i) + '_scaler'])
+    elif scaling_method == 'log':
+        for i in scaled_list:
+            transformer = FunctionTransformer(np.log1p, validate=True)
+            transformer.transform(housedata[i].array.reshape(-1,1))
+            display_price_destr(housedata['price'])
+            if i == 'price': scalers.append(transformer)
     
     end_timer = time.time()
     print('Data processed succesfully in {} seconds'.format(str(round((end_timer - start_timer), 3))))

@@ -1,6 +1,7 @@
 # General
 import pandas as pd
 import datetime
+from matplotlib import pyplot as plt
 
 # Scalers
 from sklearn.preprocessing import MinMaxScaler
@@ -111,6 +112,13 @@ def split_data(data, test_size):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
     return X_train, X_test, y_train, y_test
 
+def display_price_destr(price_col):
+    plt.xlabel('Price')
+    plt.ylabel('Number of samples')
+    plt.title('Price Distribution')
+    plt.plot()
+    plt.hist(price_col, facecolor = 'blue', edgecolor='peru', bins=15)
+    plt.show()
 
 if __name__ == "__main__":
    print('Just a utility file, nothing to see here :)')

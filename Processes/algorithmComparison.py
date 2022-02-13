@@ -10,7 +10,7 @@ from dataProcessingUtils import split_data
 from comparisonUtils import find_max_avg
 
 # Train each algorithm n times and get avg mse
-def compare_algorinthms_mse(iterations=10):
+def compare_algorinthms_mse(iterations=100):
     data = normalize('../Datasets/house_data_2022-01-26.csv')[0]
     X_train, X_test, y_train, y_test = split_data(data, 0.2)
 
