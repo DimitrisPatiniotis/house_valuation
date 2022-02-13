@@ -2,7 +2,7 @@ import sys
 import pickle
 import time
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 import datetime
 import time
 import progressbar
@@ -16,10 +16,10 @@ from dataProcessingUtils import split_data
 
 def get_best_rfr(date):
 
-    data = normalize('../Datasets/house_data_{}.csv'.format(date), scaled_list = ['price','year','loc', 'type'], encoding_type='label')[0]
+    data = normalize('../Datasets/house_data_{}.csv'.format(date), scaled_list = ['price','year','loc', 'type', 'sqm', 'lvl'], encoding_type='label')[0]
     X_train, X_test, y_train, y_test = split_data(data, 0.2)
-    print(y_train)
-    min_rmse = 100
+
+    max_r2 = 0
     current_return = None
     iters = 10
     print('Compairing models: \n')
@@ -28,22 +28,21 @@ def get_best_rfr(date):
         model = RandomForestRegressor(n_estimators= 140)
         model.fit(X_train, y_train)
         y_pred=model.predict(X_test)
-        error = mean_squared_error(y_test, y_pred, squared=False)
-        if error < min_rmse:
-            min_rmse = error
+        r2 = r2_score(y_test, y_pred)
+        if r2 > max_r2:
+            max_r2 = r2
             current_return = model
         bar.update(i)
         
-    print('\n\nMin rmse of {}'.format(round(min_rmse, 3)))
-    return current_return, min_rmse
+    print('\n\nMin rmse of {}'.format(round(max_r2, 3)))
+    return current_return, r2
 
 def create_and_store_model():
     start_timer = time.time()
     date = find_chars_until_space(str(datetime.datetime.now()))
-    min_rmse = 100
-    while min_rmse > 0.085:
-        model, min_rmse = get_best_rfr(date)
-
+    r2 = 0
+    while r2 < 0.7:
+        model, r2 = get_best_rfr(date)
     with open('../Models/model_{}.pickle'.format(date), 'wb') as f:
         pickle.dump(model, f)
     end_timer = time.time()

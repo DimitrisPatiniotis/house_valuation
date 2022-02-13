@@ -1,3 +1,4 @@
+from math import nan
 import numpy as np
 import time
 import sys
@@ -17,8 +18,12 @@ def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outli
         housedata = pd.read_csv(csv_file_path)
     except:
         print('Please enter a valid csv path')
-
-    # Droping outliers
+    housedata = housedata[housedata.nbed < 10]
+    housedata = housedata[housedata.nbath < 10]
+    # # housedata = housedata[housedata.lvl < 8]
+    housedata = housedata[housedata.sqm < 500]
+    # print(housedata['sqm'].max())
+    # # Droping outliers
     try:
         upper_lim = housedata[outlier_field].quantile(outlier_upper)
         lower_lim = housedata[outlier_field].quantile(outlier_lower)
@@ -27,8 +32,9 @@ def normalize(csv_file_path, outlier_field = 'price', outlier_upper = .99, outli
         print('Please insert valid outlier limits (range .00 to .99) and a valid field name')
         return False
 
-    if type(added_row) == 'DataFrame':
+    if isinstance(added_row, pd.DataFrame):
         housedata = pd.concat([housedata, added_row], ignore_index = True, axis = 0)
+
 
 
     # Replacing string instances from lvl column

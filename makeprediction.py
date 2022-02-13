@@ -21,6 +21,7 @@ def make_prediction(quer):
         model = unpickler.load()
     
     clean_data, price_scaler = convert_query(csv_path, quer)
+    print(clean_data)
     prediction_scaled = model.predict(clean_data)
     prediction = reverse_scale(price_scaler, prediction_scaled.reshape(1,-1))
     print(prediction_scaled)
