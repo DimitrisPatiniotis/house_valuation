@@ -108,7 +108,7 @@ To make a new prediction run:
 $ python3 makeprediction.py <property_type> <specific_location> <square_meters> <level> <number_of_bedrooms> <number_of_bathrooms> <construction_year>
 ```
 
-Property type and specific location values are not case sensitive, do not need stress-marks and can even be written in latin characters. An example is given bellow:
+Property type and specific location values are not case sensitive and do not need stress-marks. An example is given bellow:
 
 ```
 $ python3 makeprediction.py Διαμέρισμα Πασαλιμανι 90 2 2 1 1971
