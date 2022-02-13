@@ -21,7 +21,7 @@ def convert_query(csv_path, query_params=['Διαμέρισμα', 'Καμίνι�
 
     scaled_query = scaled_frame.tail(1).drop('price', axis=1)
 
-    return scaled_query
+    return scaled_query, scalers[0]
 
 def reverse_scale(scaler, price):
     return scaler.inverse_transform(price)
