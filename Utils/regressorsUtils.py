@@ -4,10 +4,9 @@ from math import sqrt
 import pandas as pd
 
 # Models
-from sklearn.linear_model import BayesianRidge, Lasso, LinearRegression
+from sklearn.linear_model import BayesianRidge, LinearRegression
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.svm import SVR
 
 # Metrics
