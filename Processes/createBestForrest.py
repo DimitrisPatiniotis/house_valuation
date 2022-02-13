@@ -16,7 +16,7 @@ from dataProcessingUtils import split_data
 
 def get_best_rfr(date):
 
-    data = normalize('../Datasets/house_data_{}.csv'.format(date), scaled_list = ['price','year','loc', 'type', 'sqm', 'lvl'], encoding_type='label')[0]
+    data = normalize('../Datasets/house_data_{}.csv'.format(date), scaled_list = ['price','year','loc', 'type', 'sqm', 'lvl', 'nbed','nbath'], encoding_type='label')[0]
     X_train, X_test, y_train, y_test = split_data(data, 0.2)
 
     max_r2 = 0
@@ -34,7 +34,7 @@ def get_best_rfr(date):
             current_return = model
         bar.update(i)
         
-    print('\n\nMin rmse of {}'.format(round(max_r2, 3)))
+    print('\nR-Squared of {}'.format(round(max_r2, 3)))
     return current_return, r2
 
 def create_and_store_model():

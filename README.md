@@ -96,7 +96,7 @@ $ cd Processes/
 $ python3 createBestForrest.py
 ```
 
-Note that the model created has a maximum RMSE of 0.085.
+Note that the model created has a minimum R-Squared of 0.7.
 
 ## Make A Prediction
 

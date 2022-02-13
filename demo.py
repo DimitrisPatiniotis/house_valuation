@@ -73,21 +73,24 @@ def main(encoding_type='one_hot', show_plots=False, scaling='min_max'):
         lr_plt.show()
 
 if __name__ == "__main__":
-    if sys.argv[1] == 'default':
-        main()
-    elif sys.argv[1] == 'scaling' and sys.argv[2] == 'log':
-        main(scaling='log')
-    elif sys.argv[1] == 'encoding' and sys.argv[2] == 'lablel':
-        main(encoding_type='label')
-    elif sys.argv[1] == 'scaling' and sys.argv[2] == 'standard':
-        main(scaling='standard')
-    elif sys.argv[1] == 'test' and sys.argv[2] == 'knn':
-        ktestKNN()
-    elif sys.argv[1] == 'test' and sys.argv[2] == 'brr':
-        ntestBRR()
-    elif sys.argv[1] == 'test' and sys.argv[2] == 'svr':
-        ctestSVR()
-    elif sys.argv[1] == 'test' and sys.argv[2] == 'rfr':
-        etestRFR()
-    else:
+    try:
+        if sys.argv[1] == 'default':
+            main()
+        elif sys.argv[1] == 'scaling' and sys.argv[2] == 'log':
+            main(scaling='log')
+        elif sys.argv[1] == 'encoding' and sys.argv[2] == 'lablel':
+            main(encoding_type='label')
+        elif sys.argv[1] == 'scaling' and sys.argv[2] == 'standard':
+            main(scaling='standard')
+        elif sys.argv[1] == 'test' and sys.argv[2] == 'knn':
+            ktestKNN()
+        elif sys.argv[1] == 'test' and sys.argv[2] == 'brr':
+            ntestBRR()
+        elif sys.argv[1] == 'test' and sys.argv[2] == 'svr':
+            ctestSVR()
+        elif sys.argv[1] == 'test' and sys.argv[2] == 'rfr':
+            etestRFR()
+        else:
+            main()
+    except:
         main()
