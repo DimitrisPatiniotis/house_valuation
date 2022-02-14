@@ -108,6 +108,8 @@ def main():
     print(house_stats.head(100))
     print(len(house_stats))
     house_stats.to_csv('../Datasets/house_data_{}.csv'.format(date),index=False)
+    house_stats.to_csv('../house_price_estimator_api/predictor_api/Datasets/house_data_{}.csv'.format(date),index=False)
+
 
 if __name__ == "__main__":
     main()

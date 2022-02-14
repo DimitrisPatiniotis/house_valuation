@@ -45,6 +45,8 @@ def create_and_store_model():
         model, r2 = get_best_rfr(date)
     with open('../Models/model_{}.pickle'.format(date), 'wb') as f:
         pickle.dump(model, f)
+    with open('../house_price_estimator_api/predictor_api/Models/model_{}.pickle'.format(date), 'wb') as f:
+        pickle.dump(model, f)
     end_timer = time.time()
     print('Model created succesfully in {} seconds and stored at ../Models/model_{}'.format(str(round((end_timer - start_timer), 3)), date))
 
